@@ -55,32 +55,14 @@ public:
 class DrawInstance :
 	public Object,
 	public Drawcall {
-	bool isVisible = true;
+	bool isVisible;
 public:
 	DrawInstance();
 	virtual ~DrawInstance();
+	void setVisible(bool newVisible);
 };
 
 extern __declspec(selectany) Engine *engine = nullptr;
-
-//template<class T> TPointer<T> instantiate(T *obj, bool transient) {
-//	TPointer<T> out = TPointer<T>(obj);
-//	//if (out.isType<Drawcall>())
-//	//	engine->renderSystem.drawcalls.push_back(out.make<Drawcall>());
-//
-//	if (transient)
-//		engine->transientObjs.registerObject(out.make<Object>());
-//	else
-//		engine->runTimeObjs.registerObject(out.make<Object>());
-//	return out;
-//}
-//template<class T> TPointer<T> getObject(string name, bool transient) {
-//	if (transient)
-//		return engine->transientObjs.getObject(name);
-//	else
-//		return engine->runTimeObjs.getObject(name);
-//	return nullptr;
-//}
 
 template<class T> static TPointer<T> instantiate(T *obj = nullptr, bool transient = false) {
 	TPointer<T> out = TPointer<T>(obj);

@@ -26,6 +26,7 @@ public:
 
 class RenderSystem {
 public:
+    unsigned int i;
     sf::RenderWindow renderWindow;
     list<Drawcall*> drawcalls;
 

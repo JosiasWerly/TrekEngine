@@ -73,20 +73,21 @@ void Engine::tick() {
 
 
 DrawInstance::DrawInstance() {
-	//setVisible(true);
+	isVisible = false;
+	setVisible(true);
 }
 DrawInstance::~DrawInstance() {
-	//setVisible(false);
+	setVisible(false);
 }
-//void DrawInstance::setVisible(bool newVisible) {
-//	if (isVisible != newVisible) {
-//		isVisible = newVisible;
-//		if (isVisible)
-//			engine->renderSystem.pushDrawcall(*this);
-//		else
-//			engine->renderSystem.popDrawcall(*this);
-//	}
-//}
+void DrawInstance::setVisible(bool newVisible) {
+	if (isVisible != newVisible) {
+		isVisible = newVisible;
+		if (isVisible)
+			engine->renderSystem.pushDrawcall(*this);
+		else
+			engine->renderSystem.popDrawcall(*this);
+	}
+}
 
 
 //template<class T> TPointer<T> instantiate(T *obj, bool transient) {

@@ -45,7 +45,7 @@ public:
 
 	void play();
 	void endPlay();
-	inline bool isPlaying();
+	bool isPlaying();
 	void tick();
 };
 

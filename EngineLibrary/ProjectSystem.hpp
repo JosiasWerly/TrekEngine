@@ -22,21 +22,21 @@ extern "C" TApi Project *instProject(class Engine *engineRef);
 class TApi Project {
 public:
     Project() {}
-    virtual ~Project();
+    virtual ~Project(){}
 
-    virtual void attached();
-    virtual void detached();
+    virtual void attached() {}
+    virtual void detached() {}
 
-    virtual void beginPlay();
-    virtual void endPlay();
+    virtual void beginPlay() {}
+    virtual void endPlay() {}
 };
 
 
 class DllTarget {
     string fileTargetPath, localPath;
     chrono::system_clock::time_point fileModTime;
-    DynamicLibrary dll;
 public:
+    DynamicLibrary dll;
     void setTarget(string targetPath, string localPath);
     void loadTarget();
     bool isLoaded();

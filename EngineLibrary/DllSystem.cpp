@@ -34,8 +34,11 @@ void DynamicLibrary::unload() {
 	th.join();
 	instance = nullptr;
 }
-template<class T> T DynamicLibrary::getFunc(string data) {
-	T p = nullptr;
-	p = (T)GetProcAddress(instance, (LPCSTR)data.c_str());
-	return p;
+long long DynamicLibrary::_getFunc(string &fName){
+	return (long long)GetProcAddress(instance, (LPCSTR)fName.c_str());
 }
+//template<class T> T DynamicLibrary::getFunc(string data) {
+//	T p = nullptr;
+//	p = (T)GetProcAddress(instance, (LPCSTR)data.c_str());
+//	return p;
+//}

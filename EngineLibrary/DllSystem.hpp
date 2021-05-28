@@ -12,16 +12,19 @@ struct HINSTANCE__;
 typedef HINSTANCE__ *HINSTANCE;
 
 class DynamicLibrary {
+	
 	HINSTANCE instance;
 	string dllPath;
 
 	void dllBeGone();
+	long long _getFunc(string &fName);
 public:
 	virtual ~DynamicLibrary();
 	bool load(string dllPath = "");
 	void unload();
-	template<class T> T getFunc(string data);
-
+	template<class T> T getFunc(string data) {
+		return (T)_getFunc(data);
+	}
 	bool isLoaded() { return instance; }
 	string getPath() { return dllPath; };
 	HINSTANCE &getHandler() { return instance; };

@@ -5,7 +5,7 @@ Drawcall::~Drawcall() {}
 void Drawcall::draw(sf::RenderWindow &w) {
 }
 bool Drawcall::operator==(const Drawcall &other) const {
-	return 0;
+	return this == &other;
 }
 
 void RenderSystem::setup() {
@@ -14,20 +14,7 @@ void RenderSystem::setup() {
 }
 void RenderSystem::tick() {
 	renderWindow.clear();
-	list<TPointer<Drawcall> *> toRemove;
-	for (auto &o : drawcalls) {
-		if (o.isValid())
-			o()->draw(renderWindow);
-		else
-			toRemove.push_back(&o);
-	}
-	for (auto &rem : toRemove)
-		drawcalls.remove(*rem);
+	for (auto &o : drawcalls)
+		o->draw(renderWindow);
 	renderWindow.display();
-}
-void RenderSystem::popDrawcall(Drawcall &ref) {
-	for (auto &d : drawcalls) {
-
-	}
-
 }

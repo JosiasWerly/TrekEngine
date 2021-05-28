@@ -27,10 +27,15 @@ public:
 class RenderSystem {
 public:
     sf::RenderWindow renderWindow;
-    list<TPointer<Drawcall>> drawcalls;
+    list<Drawcall*> drawcalls;
 
     void setup();
     void tick();
-    void popDrawcall(Drawcall& ref);
+    void popDrawcall(Drawcall &ref) {
+        drawcalls.remove(&ref);
+    }
+    void pushDrawcall(Drawcall &ref) {
+        drawcalls.push_back(&ref);
+    }
 };
 #endif // !_RenderSystem

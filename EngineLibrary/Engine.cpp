@@ -44,13 +44,13 @@ void Engine::play() {
 	if (playing)
 		endPlay();
 	playing = true;
-	//projectSystem.attachedProject->beginPlay();
+	projectSystem.attachedProject->beginPlay();
 	cout << "playing" << endl;
 	
 }
 void Engine::endPlay() {
 	playing = false;
-	//projectSystem.attachedProject->endPlay();
+	projectSystem.attachedProject->endPlay();
 	runTimeObjs.unloadMemory();
 	cout << "endPlay" << endl;
 }
@@ -71,24 +71,42 @@ void Engine::tick() {
 		runTimeObjs.tick();
 }
 
-template<class T> TPointer<T> instantiate(T *obj, bool transient) {
-	TPointer<T> out = TPointer<T>(obj);
-	//if (out.isType<Drawcall>())
-	//	engine->renderSystem.drawcalls.push_back(out.make<Drawcall>());
 
-	if (transient)
-		engine->transientObjs.registerObject(out.make<Object>());
-	else
-		engine->runTimeObjs.registerObject(out.make<Object>());
-	return out;
+DrawInstance::DrawInstance() {
+	//setVisible(true);
 }
-template<class T> TPointer<T> getObject(string name, bool transient) {
-	if (transient)
-		return engine->transientObjs.getObject(name);
-	else
-		return engine->runTimeObjs.getObject(name);
-	return nullptr;
+DrawInstance::~DrawInstance() {
+	//setVisible(false);
 }
+//void DrawInstance::setVisible(bool newVisible) {
+//	if (isVisible != newVisible) {
+//		isVisible = newVisible;
+//		if (isVisible)
+//			engine->renderSystem.pushDrawcall(*this);
+//		else
+//			engine->renderSystem.popDrawcall(*this);
+//	}
+//}
+
+
+//template<class T> TPointer<T> instantiate(T *obj, bool transient) {
+//	TPointer<T> out = TPointer<T>(obj);
+//	//if (out.isType<Drawcall>())
+//	//	engine->renderSystem.drawcalls.push_back(out.make<Drawcall>());
+//
+//	if (transient)
+//		engine->transientObjs.registerObject(out.make<Object>());
+//	else
+//		engine->runTimeObjs.registerObject(out.make<Object>());
+//	return out;
+//}
+//template<class T> TPointer<T> getObject(string name, bool transient) {
+//	if (transient)
+//		return engine->transientObjs.getObject(name);
+//	else
+//		return engine->runTimeObjs.getObject(name);
+//	return nullptr;
+//}
 
 void loadAssets(list<string> names) {
 	engine->assetSystem.loadAssets(names);

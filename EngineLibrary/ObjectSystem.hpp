@@ -22,8 +22,6 @@ public:
     virtual void tick();
 };
 
-
-
 class UObjectSystem {
     list<TPointer<Object>> objs;
 public:

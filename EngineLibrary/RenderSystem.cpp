@@ -1,10 +1,6 @@
 #include "RenderSystem.hpp"
 //#include "Engine.hpp"
-void Drawcall::setDraw() {
-}
-bool Drawcall::getDraw() {
-	return enableDraw; 
-}
+
 Drawcall::~Drawcall() {}
 void Drawcall::draw(sf::RenderWindow &w) {
 }
@@ -18,15 +14,15 @@ void RenderSystem::setup() {
 }
 void RenderSystem::tick() {
 	renderWindow.clear();
-	for (auto &d : drawcalls) {
-		if (d.isValid())
-			d()->draw(renderWindow);
+	list<TPointer<Drawcall> *> toRemove;
+	for (auto &o : drawcalls) {
+		if (o.isValid())
+			o()->draw(renderWindow);
 		else
-			toDelete.push_back(&d);
+			toRemove.push_back(&o);
 	}
-	for (auto &d : toDelete)
-		drawcalls.remove(*d);
-	toDelete.clear();
+	for (auto &rem : toRemove)
+		drawcalls.remove(*rem);
 	renderWindow.display();
 }
 void RenderSystem::popDrawcall(Drawcall &ref) {

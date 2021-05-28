@@ -18,20 +18,16 @@ using namespace sf;
 
 class RenderSystem;
 class Drawcall {
-    bool enableDraw = true;
 public:
-    void setDraw();
-    inline bool getDraw();
-
     virtual ~Drawcall();
     virtual void draw(sf::RenderWindow &w);
     bool operator==(const Drawcall &other) const;
 };
+
 class RenderSystem {
 public:
     sf::RenderWindow renderWindow;
     list<TPointer<Drawcall>> drawcalls;
-    list<TPointer<Drawcall>*> toDelete;
 
     void setup();
     void tick();

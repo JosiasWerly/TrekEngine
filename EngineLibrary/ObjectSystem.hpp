@@ -21,14 +21,7 @@ public:
     virtual ~Object();
     virtual void tick();
 };
-class DrawInstance :
-    public Object,
-    public Drawcall {
-public:
-    virtual ~DrawInstance() {
-    }
-    virtual void draw(sf::RenderWindow &w) = 0;
-};
+
 
 
 class UObjectSystem {

@@ -4,10 +4,6 @@
 #include <EngineLibrary/Trekkier.hpp>
 
 using namespace std;
-
-
-
-
 class SampleProject : 
 	public Project {
 public:

@@ -30,14 +30,14 @@ void EventSystem::tick() {
 	while (renderWindow->pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
 			renderWindow->close();
-		else if (event.type & (sf::Event::KeyPressed | sf::Event::KeyReleased)) {
+		else if (event.type & (sf::Event::KeyPressed | sf::Event::KeyReleased))
 			inputManager.processEvent(event);
-		}
 	}
 }
 
 
 Engine::Engine() {
+	playing = true;
 	eventSystem.renderWindow = &renderSystem.renderWindow;
 }
 void Engine::play() {	
@@ -52,6 +52,7 @@ void Engine::endPlay() {
 	playing = false;
 	projectSystem.attachedProject->endPlay();
 	runTimeObjs.unloadMemory();
+	transientObjs.unloadMemory();
 	cout << "endPlay" << endl;
 }
 bool Engine::isPlaying() {
@@ -63,10 +64,9 @@ void Engine::tick() {
 		projectSystem.detachProject();
 		projectSystem.loadProject(this);
 	}
+	eventSystem.tick();
 	renderSystem.tick();
 	transientObjs.tick();
-	eventSystem.tick();
-
 	if (playing)
 		runTimeObjs.tick();
 }

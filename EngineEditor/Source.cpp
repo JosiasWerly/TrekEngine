@@ -1,11 +1,11 @@
 #include <EngineLibrary/Trekkier.hpp>
 
 
-int main() {
+int main() {    
     engine = new Engine;
     engine->renderSystem.setup();
     while (true) {
-        if (isPressed(sf::Keyboard::Key::F1)) {
+        if (isClicked(sf::Keyboard::Key::F1)) {
             if (engine->isPlaying())
                 engine->endPlay();
             else

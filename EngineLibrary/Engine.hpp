@@ -62,6 +62,26 @@ public:
 	void setVisible(bool newVisible);
 };
 
+class BatchDrawInstance : 
+	public DrawInstance {
+public:
+	list<Drawable*> draws;
+	BatchDrawInstance(){}
+	inline BatchDrawInstance &operator<<(Drawable &d){
+		draws.push_back(&d);
+		return *this;
+	}
+	inline BatchDrawInstance &operator>>(Drawable &d) {
+		draws.remove(&d);
+		return *this;
+	}
+	void draw(sf::RenderWindow &w) {
+		for (auto &d : draws)
+			w.draw(*d);
+	}
+};
+
+
 extern __declspec(selectany) Engine *engine = nullptr;
 
 template<class T> static TPointer<T> instantiate(T *obj = nullptr, bool transient = false) {

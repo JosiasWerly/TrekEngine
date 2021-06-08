@@ -11,7 +11,7 @@ bool Drawcall::operator==(const Drawcall &other) const {
 }
 
 void RenderSystem::setup() {
-	renderWindow.create(sf::VideoMode(200, 200), "Trekk Demo");
+	renderWindow.create(sf::VideoMode(800, 600), "Trekk Demo");
 	renderWindow.setFramerateLimit(24);
 }
 void RenderSystem::tick() {

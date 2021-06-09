@@ -18,5 +18,6 @@ void RenderSystem::tick() {
 	renderWindow.clear();
 	for (auto &o : drawcalls)
 		o->draw(renderWindow);
+	linesQuerry.draw(renderWindow);
 	renderWindow.display();
 }

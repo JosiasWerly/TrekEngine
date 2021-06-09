@@ -1,10 +1,6 @@
 #include "Project.hpp"
 static BatchDrawInstance *draws = nullptr;
 
-
-
-
-
 class CacheInstance;
 class ContentCache {
 public:
@@ -75,10 +71,10 @@ public:
         r.setOutlineThickness(-0.5);
         r.setOutlineColor(Color::Red);
         r.setPosition(pos);
-        *draws << r;
+        //*draws << r;
     }
     ~Tile() {
-        *draws >> r;
+        //*draws >> r;
     }
 
 };
@@ -100,13 +96,12 @@ public:
         r.setOrigin({ radius, radius });
         //r.setOutlineThickness(-0.5);
         r.setOutlineColor(Color::Red);
-        *draws << r;
+        //*draws << r;
     }
     ~Ball() {
-        *draws >> r;
+        //*draws >> r;
     }
     void tick() {
-        //pos = r.getPosition();
         pos.x += vel.x;
         pos.y += vel.y;
         if (pos.x > 800)
@@ -120,11 +115,13 @@ public:
             pos.y = 600;
         r.setPosition(pos);
     }
+    void setColor(Color c) {
+        r.setFillColor(c);
+    }
 };
 class Level :
     public Object{
 public:
-    //vector<vector<Tile *>> w;
     vector<Ball*> balls;    
     void createWorld(vector<vector<Tile *>> &out, Vector2f tileSize, Vector2f worldSize) {
         int qtdX = (worldSize.x / tileSize.x),
@@ -140,34 +137,25 @@ public:
     Level() {
         for (size_t i = 0; i < 100; i++) {
             balls.push_back(new Ball({ float(rand() % 200 + 100), float(rand() % 200 + 100) }, { rand()%10-5/10.f, rand() % 10 - 5 / 10.f }, 10));
-
-
         }
-        //createWorld(w, { 10, 10 }, { 800, 600 });
     }
     void tick() {
         unsigned int sz = balls.size();
-        for (size_t i = 0; i < sz; i++){            
+        for (size_t i = 0; i < sz; i++){
             for (size_t ii = i + 1; ii < sz; ii++) {
                 Ball
                     &a = *balls[i],
                     &b = *balls[ii];
                 Vector2f dir = { a.pos.x - b.pos.x,  a.pos.y - b.pos.y };
                 float dis = sqrtf(powf(dir.x, 2) + powf(dir.y, 2));
-                if (dis < a.rad || dis < b.rad) {
-                    a.vel.x *= -1;
-                    a.vel.y *= -1;
-                    b.vel.x *= -1;
-                    b.vel.y *= -1;
-                    //a.pos.x += dis;
-                    //a.pos.y += dis;
-                    //b.pos.x += dis;
-                    //b.pos.y += dis;
-                    a.tick();
-                    b.tick();
+                if (dis <= a.rad + b.rad) {
+                    a.setColor(Color::Red);
+                    b.setColor(Color::Red);
                 }
+                engine->renderSystem.linesQuerry.querried.push_back({ a.pos , b.pos, Color(dis*3, dis * 3, dis * 3, 255)});
             }
         }
+        //cout << tests << endl;
         for (auto& b: balls)
             b->tick();
     }

@@ -23,11 +23,30 @@ public:
     virtual void draw(sf::RenderWindow &w);
     bool operator==(const Drawcall &other) const;
 };
+class DrawLineQuerry : public Drawcall {
+public:
+    struct QuerryData{
+        Vector2f a, b;
+        Color c = Color::White;
+    };
+    list<QuerryData> querried;
+    void draw(sf::RenderWindow &w) {
+        sf::Vertex line[2];
+        for (auto &p : querried){
+            line[0].position = p.a;
+            line[1].position = p.b;
+            line[1].color = line[0].color = p.c;
+            w.draw(line, 2, sf::Lines);
+        }
+        querried.clear();
+    }
+};
 
 class RenderSystem {
 public:
     sf::RenderWindow renderWindow;
-    list<Drawcall*> drawcalls;
+    list<Drawcall *> drawcalls;
+    DrawLineQuerry linesQuerry;
 
     void setup();
     void tick();

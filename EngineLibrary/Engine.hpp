@@ -37,6 +37,7 @@ public:
 
 class Engine {
 public:
+	clock_t curTick;
 	UObjectSystem runTimeObjs, transientObjs;
 	RenderSystem renderSystem;
 	ProjectSystem projectSystem;

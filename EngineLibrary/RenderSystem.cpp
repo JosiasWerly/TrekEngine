@@ -15,11 +15,6 @@ void RenderSystem::setup() {
 	renderWindow.setFramerateLimit(24);
 }
 void RenderSystem::tick() {
-	if (++i % 24 == 0) {
-		String st = "Trekk Demo | ";
-		st += std::to_string(i);
-		renderWindow.setTitle(st);
-	}
 	renderWindow.clear();
 	for (auto &o : drawcalls)
 		o->draw(renderWindow);

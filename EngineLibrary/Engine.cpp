@@ -58,7 +58,12 @@ void Engine::endPlay() {
 bool Engine::isPlaying() {
 	return playing;
 }
+//renderWindow.setTitle(st); 
+//clock_t curTick;
+//String st = "Trekk Demo | ";
+//st += std::to_string(i);
 void Engine::tick() {
+	curTick = clock();
 	if (projectSystem.deprecatedProject()) {
 		runTimeObjs.unloadMemory();
 		projectSystem.detachProject();
@@ -69,6 +74,7 @@ void Engine::tick() {
 	transientObjs.tick();
 	if (playing)
 		runTimeObjs.tick();
+	renderSystem.renderWindow.setTitle(String(std::to_string(clock() - curTick)));
 }
 
 

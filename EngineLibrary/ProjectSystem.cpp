@@ -16,7 +16,7 @@ void DllTarget::loadTarget() {
 		dll.unload();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 	fs::copy_file(fileTargetPath, localPath, fs::copy_options::overwrite_existing);
-
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 	if (dll.load(localPath))
 		fileModTime = fs::last_write_time(fs::path(fileTargetPath.c_str()));
 }

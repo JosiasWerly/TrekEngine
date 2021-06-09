@@ -3,23 +3,75 @@ static BatchDrawInstance *draws = nullptr;
 
 
 
+
+
+class CacheInstance;
+class ContentCache {
+public:
+    map<unsigned char, list<class CacheInstance*>> content;
+
+    CacheInstance *create();
+    void destroy(CacheInstance *inst);
+};
+class CacheInstance {
+    friend ContentCache;
+    ContentCache &cache;
+    map<unsigned char, bool> layers;
+
+    CacheInstance(ContentCache &cache) :
+        cache(cache) {
+    }
+    ~CacheInstance() {
+        for (auto &p : layers)
+            if (p.second)
+                setLayer(p.first, false);
+    }
+    void *target = nullptr;
+public:
+    void setTarget(void *trg) {
+        target = trg;
+    }
+    void *getTarget() {
+        return target;
+    }
+    void setLayer(unsigned char eType, bool enable) {
+        layers[eType] = enable;
+        if (enable)
+            cache.content[eType].push_back(this);
+        else
+            cache.content[eType].remove(this);
+    }
+};
+CacheInstance *ContentCache::create() {
+    CacheInstance *out = new CacheInstance(*this);
+    return out;
+}
+void ContentCache::destroy(CacheInstance *inst) {
+    delete inst;
+}
+
+
+
+
+
+
+enum class eCacheType{
+    none
+};
 class Content {
 public:
     class Tile *owned = nullptr;
+    ~Content(){}
 };
 
 class Tile {
     Vector2f pos;
     RectangleShape r;
-
-    friend Content;
-
-    list<Content *> contents;
 public:
     Tile(Vector2f pos, Vector2f size) :
         pos(pos){
         r.setSize(size);
-        r.setFillColor(Color::Black);
+        r.setFillColor(Color::Red);
         r.setOutlineThickness(-0.5);
         r.setOutlineColor(Color::Red);
         r.setPosition(pos);
@@ -28,24 +80,52 @@ public:
     ~Tile() {
         *draws >> r;
     }
-    void attach(Content *c) {
-        contents.push_back(c);
-        c->owned = this;
-    }
-    void detach(Content *c) {
-        contents.remove(c);
-        c->owned = nullptr;
-    }
+
 };
 
 
 
+class Ball {
+    CircleShape r;
+public:
+    Vector2f pos, vel;
+    float rad;
+    Ball(Vector2f pos = {100, 100}, Vector2f vel = { 1, 1 }, float radius = 10) :
+        pos(pos),
+        vel(vel),
+        rad(radius){
+        r.setRadius(radius);
+        r.setPosition(pos);
+        r.setFillColor(Color::Blue);
+        r.setOrigin({ radius, radius });
+        //r.setOutlineThickness(-0.5);
+        r.setOutlineColor(Color::Red);
+        *draws << r;
+    }
+    ~Ball() {
+        *draws >> r;
+    }
+    void tick() {
+        //pos = r.getPosition();
+        pos.x += vel.x;
+        pos.y += vel.y;
+        if (pos.x > 800)
+            pos.x = 0;
+        else if (pos.x < 0)
+            pos.x = 800;
 
-class Level : 
+        if (pos.y > 600)
+            pos.y = 0;
+        else if (pos.y < 0)
+            pos.y = 600;
+        r.setPosition(pos);
+    }
+};
+class Level :
     public Object{
-public:   
-
-    vector<vector<Tile *>> w;    
+public:
+    //vector<vector<Tile *>> w;
+    vector<Ball*> balls;    
     void createWorld(vector<vector<Tile *>> &out, Vector2f tileSize, Vector2f worldSize) {
         int qtdX = (worldSize.x / tileSize.x),
             qtdY = (worldSize.y / tileSize.y);
@@ -58,11 +138,38 @@ public:
         }
     }
     Level() {
-        createWorld(w, { 10, 10 }, { 800, 600 });
+        for (size_t i = 0; i < 100; i++) {
+            balls.push_back(new Ball({ float(rand() % 200 + 100), float(rand() % 200 + 100) }, { rand()%10-5/10.f, rand() % 10 - 5 / 10.f }, 10));
 
+
+        }
+        //createWorld(w, { 10, 10 }, { 800, 600 });
     }
     void tick() {
-
+        unsigned int sz = balls.size();
+        for (size_t i = 0; i < sz; i++){            
+            for (size_t ii = i + 1; ii < sz; ii++) {
+                Ball
+                    &a = *balls[i],
+                    &b = *balls[ii];
+                Vector2f dir = { a.pos.x - b.pos.x,  a.pos.y - b.pos.y };
+                float dis = sqrtf(powf(dir.x, 2) + powf(dir.y, 2));
+                if (dis < a.rad || dis < b.rad) {
+                    a.vel.x *= -1;
+                    a.vel.y *= -1;
+                    b.vel.x *= -1;
+                    b.vel.y *= -1;
+                    //a.pos.x += dis;
+                    //a.pos.y += dis;
+                    //b.pos.x += dis;
+                    //b.pos.y += dis;
+                    a.tick();
+                    b.tick();
+                }
+            }
+        }
+        for (auto& b: balls)
+            b->tick();
     }
 };
 
@@ -109,8 +216,6 @@ public:
 
 
 void SampleProject::attached() {
-    //engine->renderSystem.renderWindow.setSize({ 800, 600 });
-    //engine->renderSystem.renderWindow.setFramerateLimit(30);
     draws = new BatchDrawInstance;
     instantiate<Level>(new Level);
 }

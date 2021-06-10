@@ -147,12 +147,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\EngineLibrary\DllSystem.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EngineLibrary\EngineLibrary.vcxproj">
-      <Project>{bb5a9a7a-979c-4a75-9b37-93413766e415}</Project>
-    </ProjectReference>
+    <ClInclude Include="..\EngineLibrary\DllSystem.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

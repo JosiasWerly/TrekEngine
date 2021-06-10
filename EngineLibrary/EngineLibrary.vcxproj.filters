@@ -28,13 +28,8 @@
     <ClInclude Include="..\Dependencies\SFML-2.5.1\include\SFML\GpuPreference.hpp">
       <Filter>sfml</Filter>
     </ClInclude>
-    <ClInclude Include="Pointer.hpp" />
-    <ClInclude Include="AssetSystem.hpp" />
     <ClInclude Include="DllSystem.hpp" />
-    <ClInclude Include="RenderSystem.hpp" />
-    <ClInclude Include="ObjectSystem.hpp" />
     <ClInclude Include="ProjectSystem.hpp" />
-    <ClInclude Include="Engine.hpp" />
     <ClInclude Include="Trekkier.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,12 +38,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Pointer.cpp" />
-    <ClCompile Include="AssetSystem.cpp" />
     <ClCompile Include="DllSystem.cpp" />
-    <ClCompile Include="RenderSystem.cpp" />
-    <ClCompile Include="ObjectSystem.cpp" />
     <ClCompile Include="ProjectSystem.cpp" />
-    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Trekkier.cpp" />
   </ItemGroup>
 </Project>

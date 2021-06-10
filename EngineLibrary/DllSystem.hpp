@@ -6,8 +6,6 @@
 #include <tchar.h>
 #include <thread>
 using namespace std;
-
-
 struct HINSTANCE__;
 typedef HINSTANCE__ *HINSTANCE;
 
@@ -29,4 +27,11 @@ public:
 	string getPath() { return dllPath; };
 	HINSTANCE &getHandler() { return instance; };
 };
+
+#ifdef TProject
+#define TApi __declspec(dllexport)
+#else
+#define TApi __declspec(dllimport)
+#endif
+
 #endif // !_DllSystem

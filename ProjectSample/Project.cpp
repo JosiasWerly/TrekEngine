@@ -96,10 +96,10 @@ public:
         r.setOrigin({ radius, radius });
         //r.setOutlineThickness(-0.5);
         r.setOutlineColor(Color::Red);
-        //*draws << r;
+        *draws << r;
     }
     ~Ball() {
-        //*draws >> r;
+        *draws >> r;
     }
     void tick() {
         pos.x += vel.x;
@@ -117,6 +117,10 @@ public:
     }
     void setColor(Color c) {
         r.setFillColor(c);
+    }
+
+    bool operator==(const Ball &other) const {
+        return &this->r == &other.r;
     }
 };
 class Level :
@@ -141,21 +145,52 @@ public:
     }
     void tick() {
         unsigned int sz = balls.size();
-        for (size_t i = 0; i < sz; i++){
-            for (size_t ii = i + 1; ii < sz; ii++) {
-                Ball
-                    &a = *balls[i],
-                    &b = *balls[ii];
-                Vector2f dir = { a.pos.x - b.pos.x,  a.pos.y - b.pos.y };
-                float dis = sqrtf(powf(dir.x, 2) + powf(dir.y, 2));
-                if (dis <= a.rad + b.rad) {
-                    a.setColor(Color::Red);
-                    b.setColor(Color::Red);
-                }
-                engine->renderSystem.linesQuerry.querried.push_back({ a.pos , b.pos, Color(dis*3, dis * 3, dis * 3, 255)});
-            }
-        }
-        //cout << tests << endl;
+        int tests = 0;
+		vector<Ball *> chunks[8][6];
+		for (size_t i = 0; i < sz; i++) {
+			Ball &a = *balls[i];
+            float 
+                x = 0,
+                y = 0;
+            chunks[int(a.pos.x / 800.f * 7)][int(a.pos.y / 600.f * 5)].push_back(&a);
+			//chunks[int(a.pos.x / 800.f * 7)][int(a.pos.y / 600.f * 5)].push_back(&a);
+		}
+		for (size_t x = 0; x < 8; x++) {
+			for (size_t y = 0; y < 6; y++) {
+				auto &c = chunks[x][y];
+				int cSz = c.size();
+				for (size_t b = 0; b < cSz; b++) {
+					for (size_t bb = b + 1; bb < cSz; bb++) {
+						Ball
+							&a = *c[b],
+							&b = *c[bb];
+						Vector2f dir = { a.pos.x - b.pos.x,  a.pos.y - b.pos.y };
+						float dis = sqrtf(powf(dir.x, 2) + powf(dir.y, 2));
+						engine->renderSystem.linesQuerry.querried.push_back({ a.pos , b.pos, Color(dis * 3, dis * 3, dis * 3, 255) });
+						tests++;
+					}
+				}
+			}
+		}
+		cout << tests << endl;
+
+
+		/*for (size_t i = 0; i < sz; i++) {
+			for (size_t ii = i + 1; ii < sz; ii++) {
+				Ball
+					&a = *balls[i],
+					&b = *balls[ii];
+				Vector2f dir = { a.pos.x - b.pos.x,  a.pos.y - b.pos.y };
+				float dis = sqrtf(powf(dir.x, 2) + powf(dir.y, 2));
+				if (dis <= a.rad + b.rad) {
+					a.setColor(Color::Red);
+					b.setColor(Color::Red);
+				}
+                tests++;
+				engine->renderSystem.linesQuerry.querried.push_back({ a.pos , b.pos, Color(dis * 3, dis * 3, dis * 3, 255) });
+			}
+		}*/
+		cout << tests << endl;
         for (auto& b: balls)
             b->tick();
     }
